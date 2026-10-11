@@ -1,13 +1,7 @@
+"""Data models for API requests and responses"""
+
 from pydantic import BaseModel, Field
 from enum import Enum
-
-class Coordinates(BaseModel):
-    latitude: float | int = Field(ge=-180.0, le=180.0)
-    longitude: float | int = Field(ge=-180.0, le=180.0)
-
-class City(BaseModel):
-    coordinates: Coordinates
-    name: str | None
 
 class DailyMetrics(str, Enum):
     """Valid daily metrics to query API for"""
@@ -16,19 +10,22 @@ class DailyMetrics(str, Enum):
     sunrise = "sunrise"
     sunset = "sunset"
     daylight_duration = "daylight_duration"
-    uv_max_index = "uv_max_index"
+    uv_index_max = "uv_index_max"
     precipitation = "precipitation_sum"
 
 class WeatherAPIRequest(BaseModel):
     """Data model for weather API request body"""
-    coordinates: Coordinates
+    latitude: float | int = Field(ge=-180.0, le=180.0)
+    longitude: float | int = Field(ge=-180.0, le=180.0)
     daily: list[DailyMetrics] = Field(default_factory=list)
-    forecast_duration: int = Field(ge=1, default=1)
+    forecast_days: int = Field(ge=1, default=1)
 
 class WeatherAPIResponse(BaseModel):
-    coordinates: Coordinates
+    """Data model for weather API response body"""
+    latitude: float | int = Field(ge=-180.0, le=180.0)
+    longitude: float | int = Field(ge=-180.0, le=180.0)
     elevation: float
-    generation_time_ms: float
+    generationtime_ms: float
     utc_offset_seconds: int
     timezone: str
     timezone_abbreviation: str
