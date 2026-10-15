@@ -5,6 +5,42 @@ export type ClientOptions = {
 };
 
 /**
+ * DailyData
+ *
+ * Expected dtypes for each metric returned.
+ */
+export type DailyData = {
+    /**
+     * Temperature 2M Max
+     */
+    temperature_2m_max?: number | number | null;
+    /**
+     * Temperature 2M Min
+     */
+    temperature_2m_min?: number | number | null;
+    /**
+     * Sunrise
+     */
+    sunrise?: string | null;
+    /**
+     * Sunset
+     */
+    sunset?: string | null;
+    /**
+     * Daylight Duration
+     */
+    daylight_duration?: number | null;
+    /**
+     * Uv Index Max
+     */
+    uv_index_max?: number | number | null;
+    /**
+     * Precipitation Sum
+     */
+    precipitation_sum?: number | number | null;
+};
+
+/**
  * DailyMetrics
  *
  * Valid daily metrics to query API for
@@ -83,12 +119,7 @@ export type WeatherApiResponse = {
      * Timezone Abbreviation
      */
     timezone_abbreviation: string;
-    /**
-     * Daily
-     */
-    daily?: {
-        [key in DailyMetrics]?: Array<string>;
-    };
+    daily?: DailyData;
     /**
      * Daily Units
      */
