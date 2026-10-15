@@ -1,2 +1,6 @@
 .venv
 .idea/
+*/__pycache__/
+node_modules
+*.sql_lite
+.env

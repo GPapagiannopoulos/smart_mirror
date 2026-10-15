@@ -1,4 +1,5 @@
 """Data models for API requests and responses"""
+import string
 
 from pydantic import BaseModel, Field
 from enum import Enum
@@ -29,7 +30,7 @@ class WeatherAPIResponse(BaseModel):
     utc_offset_seconds: int
     timezone: str
     timezone_abbreviation: str
-    daily: dict[DailyMetrics, list] = Field(default_factory=dict)
+    daily: dict[DailyMetrics, list[float | int]] = Field(default_factory=dict)
     daily_units: dict[DailyMetrics, str] = Field(default_factory=dict)
 
 
