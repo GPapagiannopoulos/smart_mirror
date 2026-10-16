@@ -20,7 +20,7 @@ const currentMetrics: Array<CurrentMetrics> = [
 
 export default function Weather() {
     const [data, setData] = useState<WeatherApiResponse | null>(null)
-    const [error, setError] = useState<HttpValidationError | null>(null)
+    const [validationError, setError] = useState<HttpValidationError | null>(null)
     const [coordinates, setCoordinates] = useState<GeolocationCoordinates | null>(null)
 
 
@@ -28,11 +28,11 @@ export default function Weather() {
         async function determineLocation(): Promise<void> {
             const options = {enableHighAccuracy: true, timeout: 10000}
 
-            function success(pos) {
+            function success(pos: any) {
                 setCoordinates(pos.coords);
             }
 
-            function error(err) {
+            function error(err: any) {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
             }
 
@@ -55,13 +55,14 @@ export default function Weather() {
                 }
 
         async function getWeatherData() {
-            const {data, error, response} = await weatherApiWeatherGet({
+            const {data, error} = await weatherApiWeatherGet({
                 "query": weatherApiRequestQuery
             })
             if (error) {
-                setError(error)
+                setError(error);
+                console.log(validationError);
             } else {
-                setData(data)
+                setData(data);
             }
         }
         getWeatherData();
@@ -199,7 +200,7 @@ export default function Weather() {
         )
     }
     return (
-        <div className="border-dashed border-white border text-white">
+        <div>
             { determineTemperature() }
             { interpretUVIndex() }
             { interpretPrecipitation() }

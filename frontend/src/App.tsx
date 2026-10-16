@@ -1,14 +1,14 @@
 import './App.css'
 import Weather from "./components/Weather.tsx";
+import Clock from "./components/Clock.tsx";
 
 function App() {
 
   return (
-      <body  className="bg-black w-max h-max">
-        <div>
-            <Weather  />
-        </div>
-      </body>
+      <div  className="bg-black w-screen h-screen">
+        <Clock />
+        <Weather  />
+      </div>
 
 
   )
