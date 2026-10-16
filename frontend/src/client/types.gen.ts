@@ -5,6 +5,25 @@ export type ClientOptions = {
 };
 
 /**
+ * CurrentData
+ *
+ * Expected dtypes for each metric returned.
+ */
+export type CurrentData = {
+    /**
+     * Temperature 2M
+     */
+    temperature_2m?: number | number | null;
+};
+
+/**
+ * CurrentMetrics
+ *
+ * Valid current metrics to query API for
+ */
+export type CurrentMetrics = 'temperature_2m';
+
+/**
  * DailyData
  *
  * Expected dtypes for each metric returned.
@@ -29,7 +48,7 @@ export type DailyData = {
     /**
      * Daylight Duration
      */
-    daylight_duration?: number | null;
+    daylight_duration?: number | number | null;
     /**
      * Uv Index Max
      */
@@ -126,6 +145,7 @@ export type WeatherApiResponse = {
     daily_units?: {
         [key in DailyMetrics]?: string;
     };
+    current?: CurrentData;
 };
 
 export type RootApiGetData = {
@@ -158,6 +178,10 @@ export type WeatherApiWeatherGetData = {
          * Daily
          */
         daily?: Array<DailyMetrics>;
+        /**
+         * Current
+         */
+        current?: Array<CurrentMetrics>;
         /**
          * Forecast Days
          */

@@ -4,7 +4,7 @@ import Weather from "./components/Weather.tsx";
 function App() {
 
   return (
-      <body  className="bg-black w-auto h-auto">
+      <body  className="bg-black w-max h-max">
         <div>
             <Weather  />
         </div>

@@ -1,7 +1,8 @@
-import type {WeatherApiResponse, HttpValidationError, DailyMetrics} from "../client";
+import type {WeatherApiResponse, HttpValidationError, DailyMetrics, CurrentMetrics} from "../client";
 import { weatherApiWeatherGet} from "../client";
 import {useEffect, useState} from "react";
 import {CloudDrizzle, Sun} from "lucide-react";
+import {format} from "date-fns"
 
 const dailyMetrics: Array<DailyMetrics> = [
     "temperature_2m_max",
@@ -11,6 +12,10 @@ const dailyMetrics: Array<DailyMetrics> = [
     "daylight_duration",
     "uv_index_max",
     "precipitation_sum"
+]
+
+const currentMetrics: Array<CurrentMetrics> = [
+    "temperature_2m"
 ]
 
 export default function Weather() {
@@ -45,6 +50,7 @@ export default function Weather() {
             "latitude": coordinates?.latitude,
             "longitude": coordinates?.longitude,
             "daily": dailyMetrics,
+            "current": currentMetrics,
             "forecast_days": 1
                 }
 
@@ -110,15 +116,25 @@ export default function Weather() {
     }
 
     function determineTemperature() {
+        if (!data?.daily?.temperature_2m_min == null || !data?.daily?.temperature_2m_max == null) {
+            return (
+                <div>
+                    Temperature data is missing!
+                </div>
+            )
+        }
         return (
-            <span>Today's temperature: {data?.daily?.temperature_2m_min} - {data?.daily?.temperature_2m_max} {data?.daily_units?.temperature_2m_max} </span>
+            <div>
+                Today's temperature: {data?.daily?.temperature_2m_min} - {data?.daily?.temperature_2m_max} {data?.daily_units?.temperature_2m_max}
+                Current temperature: {data?.current?.temperature_2m}
+            </div>
         )
     }
 
     function interpretPrecipitation() {
         if (data?.daily?.precipitation_sum == null) {
             return (
-                <span>Precipitation not available!</span>
+                <div>Precipitation not available!</div>
             )
         }
         const totalPrecipitation: number = data?.daily?.precipitation_sum;
@@ -130,13 +146,13 @@ export default function Weather() {
             icon = <CloudDrizzle className="opacity-0"/>;
             reminder = "Good to go!";
         } else if (totalPrecipitation <=4) {
-            category = "Drizzle";
+            category = "Light Rain";
             icon = <CloudDrizzle className="opacity-50"/>;
-            reminder = "Good to go!";
+            reminder = "Take an umbrella!";
         } else if (totalPrecipitation <= 6) {
             category = "Moderate Rain";
             icon = <CloudDrizzle className="opacity-50"/>;
-            reminder = "Remember your coat!";
+            reminder = "Take an umbrella!";
         } else if (totalPrecipitation <= 20) {
             category = "Heavy Rain";
             icon = <CloudDrizzle className="opacity-90"/>;
@@ -155,11 +171,40 @@ export default function Weather() {
         )
     }
 
+    function determineSunrise() {
+        if (data?.daily?.sunrise == null) {
+            return (
+                <div>Sunrise time unavailable!</div>
+            )
+        }
+
+        return (
+            <div>
+                Sunrise {format(data?.daily?.sunrise, "pp")}
+            </div>
+        )
+    }
+
+    function determineSunset() {
+        if (data?.daily?.sunset == null) {
+            return (
+                <div>Sunset time unavailable!</div>
+            )
+        }
+
+        return (
+            <div>
+                Sunset {format(data?.daily?.sunset, "pp")}
+            </div>
+        )
+    }
     return (
         <div className="border-dashed border-white border text-white">
             { determineTemperature() }
             { interpretUVIndex() }
             { interpretPrecipitation() }
+            { determineSunrise() }
+            { determineSunset() }
         </div>
     )
 }
