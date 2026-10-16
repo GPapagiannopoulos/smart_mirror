@@ -1,7 +1,7 @@
 import type {WeatherApiResponse, HttpValidationError, DailyMetrics, CurrentMetrics} from "../client";
 import { weatherApiWeatherGet} from "../client";
 import {useEffect, useState} from "react";
-import {CloudDrizzle, Sun} from "lucide-react";
+import {CloudDrizzle, Sun, ThermometerIcon} from "lucide-react";
 import {format} from "date-fns"
 
 const dailyMetrics: Array<DailyMetrics> = [
@@ -124,10 +124,18 @@ export default function Weather() {
                 </div>
             )
         }
+
+        const maxTemp: number = data?.daily_units?.temperature_2m_max;
+        const minTemp: number = data?.daily?.temperature_2m_min;
+        const currTemp: number = data?.current?.temperature_2m;
+        const celsius: string = data?.daily_units?.temperature_2m_max;
+
         return (
-            <div>
-                Today's temperature: {data?.daily?.temperature_2m_min} - {data?.daily?.temperature_2m_max} {data?.daily_units?.temperature_2m_max}
-                Current temperature: {data?.current?.temperature_2m}
+            <div >
+                <span className="flex">
+                    <ThermometerIcon /> {currTemp} {celsius}
+                </span>
+                <span>{minTemp} {celsius} - {maxTemp} {celsius}</span>
             </div>
         )
     }
@@ -201,11 +209,16 @@ export default function Weather() {
     }
     return (
         <div>
-            { determineTemperature() }
-            { interpretUVIndex() }
-            { interpretPrecipitation() }
-            { determineSunrise() }
-            { determineSunset() }
+            <div>
+                { determineTemperature() }
+                { interpretPrecipitation() }
+            </div>
+            <div>
+                { determineSunrise() }
+                { determineSunset() }
+                { interpretUVIndex() }
+            </div>
+
         </div>
     )
 }

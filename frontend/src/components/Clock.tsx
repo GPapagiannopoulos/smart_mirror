@@ -12,6 +12,8 @@ export default function Clock() {
     }, [])
 
     return (
-        <div>{time}</div>
+        <div className={"font-mono font-bold text-2xl text-white"}>
+            {time}
+        </div>
     )
 }
