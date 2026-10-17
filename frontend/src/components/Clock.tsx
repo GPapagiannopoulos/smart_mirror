@@ -12,8 +12,10 @@ export default function Clock() {
     }, [])
 
     return (
-        <div className={"font-mono font-bold text-2xl text-white"}>
-            {time}
+        <div className="flex justify-start">
+            <span className={"font-mono font-bold text-2xl text-white"}>
+                {time}
+            </span>
         </div>
     )
 }

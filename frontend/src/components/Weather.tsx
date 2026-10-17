@@ -1,7 +1,7 @@
 import type {WeatherApiResponse, HttpValidationError, DailyMetrics, CurrentMetrics} from "../client";
 import { weatherApiWeatherGet} from "../client";
 import {useEffect, useState} from "react";
-import {CloudDrizzle, Sun, ThermometerIcon} from "lucide-react";
+import {CloudDrizzle, Sun, SunriseIcon, SunsetIcon, ThermometerIcon} from "lucide-react";
 import {format} from "date-fns"
 
 const dailyMetrics: Array<DailyMetrics> = [
@@ -110,14 +110,19 @@ export default function Weather() {
 
         return (
             <div>
-                UV Index: {category} {sunIcon} <br/>
-                {reminder}
+                <span className={"flex gap-4 justify-end"}>
+                     {sunIcon} UV Index:{category}
+                </span>
+                <span className={"flex justify-end"}>
+                    {reminder}
+                </span>
+
             </div>
         )
     }
 
     function determineTemperature() {
-        if (!data?.daily?.temperature_2m_min == null || !data?.daily?.temperature_2m_max == null) {
+        if (data?.daily?.temperature_2m_min == null || data?.daily?.temperature_2m_max == null) {
             return (
                 <div>
                     Temperature data is missing!
@@ -125,17 +130,19 @@ export default function Weather() {
             )
         }
 
-        const maxTemp: number = data?.daily_units?.temperature_2m_max;
+        const maxTemp: number = data?.daily?.temperature_2m_max;
         const minTemp: number = data?.daily?.temperature_2m_min;
         const currTemp: number = data?.current?.temperature_2m;
         const celsius: string = data?.daily_units?.temperature_2m_max;
 
         return (
-            <div >
-                <span className="flex">
-                    <ThermometerIcon /> {currTemp} {celsius}
+            <div>
+                <span className={"flex gap-4"}>
+                    <ThermometerIcon /> {currTemp}{celsius}
                 </span>
-                <span>{minTemp} {celsius} - {maxTemp} {celsius}</span>
+                <span className={"flex ml-10"}>
+                    {minTemp}{celsius} - {maxTemp}{celsius}
+                </span>
             </div>
         )
     }
@@ -152,7 +159,7 @@ export default function Weather() {
         let reminder: string;
         if (totalPrecipitation <= 1) {
             category = "No Rain";
-            icon = <CloudDrizzle className="opacity-0"/>;
+            icon = <Sun className="opacity-100"/>;
             reminder = "Good to go!";
         } else if (totalPrecipitation <=4) {
             category = "Light Rain";
@@ -174,8 +181,12 @@ export default function Weather() {
 
         return (
             <div>
-                {category} {totalPrecipitation > 0 && icon} <br/>
-                {reminder}
+                <span  className={"flex justify-end gap-4"}>
+                    {icon} {category}
+                </span>
+                <span className={"flex justify-end"}>
+                    {reminder}
+                </span>
             </div>
         )
     }
@@ -186,10 +197,11 @@ export default function Weather() {
                 <div>Sunrise time unavailable!</div>
             )
         }
-
         return (
             <div>
-                Sunrise {format(data?.daily?.sunrise, "pp")}
+                <span className={"flex gap-4"}>
+                    <SunriseIcon /> {format(data?.daily?.sunrise, "pp")}
+                </span>
             </div>
         )
     }
@@ -197,25 +209,31 @@ export default function Weather() {
     function determineSunset() {
         if (data?.daily?.sunset == null) {
             return (
-                <div>Sunset time unavailable!</div>
+                <div>
+                    Sunset time unavailable!
+                </div>
             )
         }
-
         return (
             <div>
-                Sunset {format(data?.daily?.sunset, "pp")}
+                <span className={"flex gap-4"}>
+                    <SunsetIcon /> {format(data?.daily?.sunset, "pp")}
+                </span>
+
             </div>
         )
     }
     return (
-        <div>
-            <div>
+        <div className={"font-mono font-semibold text-white flex flex-col gap-4"}>
+            <div className={"grid grid-cols-2"}>
                 { determineTemperature() }
                 { interpretPrecipitation() }
             </div>
-            <div>
-                { determineSunrise() }
-                { determineSunset() }
+            <div className={"grid grid-cols-2"}>
+                <div className={"flex flex-col gap-2"}>
+                    { determineSunrise() }
+                    { determineSunset() }
+                </div>
                 { interpretUVIndex() }
             </div>
 

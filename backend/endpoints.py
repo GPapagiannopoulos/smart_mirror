@@ -18,6 +18,10 @@ router = APIRouter(prefix="/api")
 async def root():
     return {"message": "Hello, World!"}
 
+
+def _collapse_list(lst: list[str]) -> str:
+    return ",".join(lst)
+
 @router.get("/weather",
          response_model=WeatherAPIResponse,
          tags=["weather"]
@@ -25,8 +29,8 @@ async def root():
 async def weather(request_body: Annotated[WeatherAPIRequest, Query()]):
     params = request_body.model_dump()
 
-    new_daily = [param.value for param in params["daily"]]
-    params["daily"] = ",".join(new_daily)
+    params["daily"] = _collapse_list(params["daily"])
+    params["current"] = _collapse_list(params["current"])
 
     async with httpx.AsyncClient() as client:
         response = await client.get(settings.WEATHER_API_URL, params=params)
@@ -35,8 +39,12 @@ async def weather(request_body: Annotated[WeatherAPIRequest, Query()]):
         raise HTTPException(status_code=response.status_code, detail=response.json())
 
     clean_response = response.json()
-    clean_response["daily"].pop("time")
-    clean_response["daily_units"].pop("time")
+
+    time_fields = ["daily", "current", "daily_units"]
+    for key in time_fields:
+        clean_response[key].pop("time")
+    for key in clean_response["daily"].keys():
+        clean_response["daily"][key] = next(iter(clean_response["daily"][key]))
 
     return WeatherAPIResponse.model_validate(clean_response)
 
