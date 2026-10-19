@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {type LucideIcon, MoonStar, SunMediumIcon} from "lucide-react";
-import {format, isAfter} from "date-fns"
+import {format, isAfter, isBefore} from "date-fns"
 
 const daysOfTheWeek: Array<string> = [
     "Sunday", "Monday", "Tuesday", "Wednesday",
@@ -12,7 +12,7 @@ const monthsOfTheYear: Array<string> = [
     "September", "October", "November", "December"
 ]
 
-export default function Clock( {sunset} : {sunset:string | null} ) {
+export default function Clock( {sunset, sunrise} : {sunset:string | null, sunrise:string | null} ) {
     const [date, setDate] = useState<string | null>(null);
     const [time, setTime] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ export default function Clock( {sunset} : {sunset:string | null} ) {
 
     return (
         <div className="flex items-center gap-4">
-            { isAfter(new Date(), new Date(sunset? sunset : "")) ? <MoonStar size={"64"}/> : <SunMediumIcon size={"64"}/> }
+            { isAfter(new Date(), new Date(sunset? sunset : "")) || isBefore(new Date(), new Date(sunrise? sunrise : "")) ? <MoonStar size={"64"}/> : <SunMediumIcon size={"64"}/> }
             <div className={"flex flex-col items-start gap-4 font-mono font-bold text-2xl text-white"}>
                 <span>{date}</span> <span>{time}</span>
             </div>
