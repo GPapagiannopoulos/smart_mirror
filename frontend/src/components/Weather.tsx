@@ -4,70 +4,7 @@ import {useEffect, useState} from "react";
 import {CloudDrizzle, Sun, SunriseIcon, SunsetIcon, ThermometerIcon} from "lucide-react";
 import {format} from "date-fns"
 
-const dailyMetrics: Array<DailyMetrics> = [
-    "temperature_2m_max",
-    "temperature_2m_min",
-    "sunrise",
-    "sunset",
-    "daylight_duration",
-    "uv_index_max",
-    "precipitation_sum"
-]
-
-const currentMetrics: Array<CurrentMetrics> = [
-    "temperature_2m"
-]
-
-export default function Weather() {
-    const [data, setData] = useState<WeatherApiResponse | null>(null)
-    const [validationError, setError] = useState<HttpValidationError | null>(null)
-    const [coordinates, setCoordinates] = useState<GeolocationCoordinates | null>(null)
-
-
-    useEffect(() => {
-        async function determineLocation(): Promise<void> {
-            const options = {enableHighAccuracy: true, timeout: 10000}
-
-            function success(pos: any) {
-                setCoordinates(pos.coords);
-            }
-
-            function error(err: any) {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
-            }
-
-            navigator.geolocation.getCurrentPosition(success, error, options);
-        }
-        determineLocation();
-    }, [])
-
-    useEffect(() => {
-        if (!coordinates) {
-            return;
-        }
-
-        const weatherApiRequestQuery = {
-            "latitude": coordinates?.latitude,
-            "longitude": coordinates?.longitude,
-            "daily": dailyMetrics,
-            "current": currentMetrics,
-            "forecast_days": 1
-                }
-
-        async function getWeatherData() {
-            const {data, error} = await weatherApiWeatherGet({
-                "query": weatherApiRequestQuery
-            })
-            if (error) {
-                setError(error);
-                console.log(validationError);
-            } else {
-                setData(data);
-            }
-        }
-        getWeatherData();
-    }, [coordinates])
-
+export default function Weather({ data } : {data: WeatherApiResponse} ) {
     if (!data) {
         return (
             <div className="border-dashed border-white border">
