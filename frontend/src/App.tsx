@@ -1,7 +1,6 @@
 import './App.css'
 import Weather from "./components/Weather.tsx";
 import Clock from "./components/Clock.tsx";
-import {Sun} from "lucide-react";
 import {useEffect, useState} from "react";
 import {
     type CurrentMetrics,
@@ -10,6 +9,7 @@ import {
     type WeatherApiResponse,
     weatherApiWeatherGet
 } from "./client";
+import Transport from "./components/Transport.tsx";
 
 const dailyMetrics: Array<DailyMetrics> = [
     "temperature_2m_max",
@@ -76,8 +76,9 @@ function App() {
 
   return (
       <div className="bg-black w-auto h-screen flex flex-col p-12 gap-10">
-          <Clock sunset={data?.daily?.sunset}/>
+          <Clock sunset={data?.daily?.sunset} sunrise={data?.daily?.sunrise}/>
           <Weather data={data}/>
+          <Transport />
       </div>
 
 

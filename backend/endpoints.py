@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, Query, APIRouter
 import logging
 import httpx
 
-from .models import WeatherAPIResponse, WeatherAPIRequest
+from .models import WeatherAPIResponse, WeatherAPIRequest, TflAPIResponse
 from .settings import settings
 
 logger = logging.getLogger("uvicorn.error")
@@ -47,5 +47,24 @@ async def weather(request_body: Annotated[WeatherAPIRequest, Query()]):
         clean_response["daily"][key] = next(iter(clean_response["daily"][key]))
 
     return WeatherAPIResponse.model_validate(clean_response)
+
+@router.get(
+    "/transport",
+    response_model=TflAPIResponse,
+    tags=["transport"]
+)
+async def transport():
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(settings.TFL_API_URL,
+                                    params={
+                                        "app_key": settings.TFL_API_KEY.get_secret_value(),
+                                    }
+        )
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail=response.text)
+
+    return TflAPIResponse.model_validate({"messages": response.json()})
 
 app.include_router(router)

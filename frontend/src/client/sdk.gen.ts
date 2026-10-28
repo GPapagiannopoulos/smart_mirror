@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { RootApiGetData, RootApiGetResponses, WeatherApiWeatherGetData, WeatherApiWeatherGetErrors, WeatherApiWeatherGetResponses } from './types.gen';
+import type { RootApiGetData, RootApiGetResponses, TransportApiTransportGetData, TransportApiTransportGetResponses, WeatherApiWeatherGetData, WeatherApiWeatherGetErrors, WeatherApiWeatherGetResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -27,3 +27,8 @@ export const rootApiGet = <ThrowOnError extends boolean = false>(options?: Optio
  * Weather
  */
 export const weatherApiWeatherGet = <ThrowOnError extends boolean = false>(options: Options<WeatherApiWeatherGetData, ThrowOnError>): RequestResult<WeatherApiWeatherGetResponses, WeatherApiWeatherGetErrors, ThrowOnError> => (options.client ?? client).get<WeatherApiWeatherGetResponses, WeatherApiWeatherGetErrors, ThrowOnError>({ url: '/api/weather', ...options });
+
+/**
+ * Transport
+ */
+export const transportApiTransportGet = <ThrowOnError extends boolean = false>(options?: Options<TransportApiTransportGetData, ThrowOnError>): RequestResult<TransportApiTransportGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<TransportApiTransportGetResponses, unknown, ThrowOnError>({ url: '/api/transport', ...options });

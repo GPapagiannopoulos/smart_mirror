@@ -1,6 +1,4 @@
-import type {WeatherApiResponse, HttpValidationError, DailyMetrics, CurrentMetrics} from "../client";
-import { weatherApiWeatherGet} from "../client";
-import {useEffect, useState} from "react";
+import type {WeatherApiResponse} from "../client";
 import {CloudDrizzle, Sun, SunriseIcon, SunsetIcon, ThermometerIcon} from "lucide-react";
 import {format} from "date-fns"
 

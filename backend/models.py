@@ -52,4 +52,55 @@ class WeatherAPIResponse(BaseModel):
     daily_units: dict[DailyMetrics, str] = Field(default_factory=dict)
     current: CurrentData = Field(default_factory=dict)
 
+class TfLRouteSection(BaseModel):
+    id: str | None = None
+    lineId: str | None = None
+    routeCode: str | None = None
+    name: str | None = None
+    lineString: str | None = None
+    direction: str | None = None
+    originationName: str | None = None
+    destinationName: str | None = None
+    validTo: datetime | None = None
+    validFrom: datetime | None = None
 
+class TfLAPIDisruption(BaseModel):
+    category: str | None = None
+    type: str | None = None
+    categoryDescription: str | None = None
+    description: str | None = None
+    summary: str | None = None
+    additionalInfo: str | None = None
+    created: datetime | None = None
+    lastUpdate: datetime | None = None
+    affectedRoutes: TfLRouteSection = Field(default_factory=dict)
+    closureText: str | None =None
+
+class TfLAPILineStatus(BaseModel):
+    id: int | None = None
+    lineId: str | None = None
+    statusSeverity: int | None = None
+    StatusSeverityDescription: str | None = None
+    reason: str | None = None
+
+class TfLAPITrainLoading(BaseModel):
+    line: str | None = None
+    lineDirection: str | None = None
+    value: int | None = None
+
+class TfLAPICrowding(BaseModel):
+    trainLoadings: list[TfLAPITrainLoading] = Field(default_factory=list[dict])
+
+class TfLAPILine(BaseModel):
+    id: str | None = None
+    name: str | None = None
+    modeName: str | None = None
+    disruptions: list[TfLAPIDisruption] = Field(default_factory=list[dict])
+    created: datetime | None = None
+    modified: datetime | None = None
+    lineStatuses: list[TfLAPILineStatus] = Field(default_factory=list[dict])
+    crowding: TfLAPICrowding = Field(default_factory=dict)
+
+class TflAPIResponse(BaseModel):
+    """Data model for TfL API response body"""
+    messages: list[TfLAPILine] = Field(default_factory=list)
