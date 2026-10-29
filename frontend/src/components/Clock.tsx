@@ -1,16 +1,8 @@
 import {useEffect, useState} from "react";
-import {type LucideIcon, MoonStar, SunMediumIcon} from "lucide-react";
+import {MoonStar, SunMediumIcon} from "lucide-react";
 import {format, isAfter, isBefore} from "date-fns"
 
-const daysOfTheWeek: Array<string> = [
-    "Sunday", "Monday", "Tuesday", "Wednesday",
-    "Thursday", "Friday", "Saturday",
-]
-const monthsOfTheYear: Array<string> = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December"
-]
+
 
 export default function Clock( {sunset, sunrise} : {sunset:string | null, sunrise:string | null} ) {
     const [date, setDate] = useState<string | null>(null);

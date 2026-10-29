@@ -77,164 +77,25 @@ export type HttpValidationError = {
 };
 
 /**
- * TfLAPICrowding
+ * TfLAPIDisruptedLineInfo
  */
-export type TfLapiCrowding = {
-    crowding?: TfLapiTrainLoading;
-};
-
-/**
- * TfLAPIDisruption
- */
-export type TfLapiDisruption = {
-    /**
-     * Category
-     */
-    category?: string | null;
-    /**
-     * Type
-     */
-    type?: string | null;
-    /**
-     * Categorydescription
-     */
-    categoryDescription?: string | null;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
-     * Summary
-     */
-    summary?: string | null;
-    /**
-     * Additionalinfo
-     */
-    additionalInfo?: string | null;
-    /**
-     * Created
-     */
-    created?: string | null;
-    /**
-     * Lastupdate
-     */
-    lastUpdate?: string | null;
-    affectedRoutes?: TfLRouteSection;
-    /**
-     * Closuretext
-     */
-    closureText?: string | null;
-};
-
-/**
- * TfLAPILine
- */
-export type TfLapiLine = {
-    /**
-     * Id
-     */
-    id?: string | null;
+export type TfLapiDisruptedLineInfo = {
     /**
      * Name
      */
     name?: string | null;
     /**
-     * Modename
+     * Severity
      */
-    modeName?: string | null;
-    disruptions?: TfLapiDisruption;
-    /**
-     * Created
-     */
-    created?: string | null;
-    /**
-     * Modified
-     */
-    modified?: string | null;
-    lineStatuses?: TfLapiLineStatus;
-    crowding?: TfLapiCrowding;
-};
-
-/**
- * TfLAPILineStatus
- */
-export type TfLapiLineStatus = {
-    /**
-     * Id
-     */
-    id?: number | null;
-    /**
-     * Lineid
-     */
-    lineId?: string | null;
-    /**
-     * Statusseverity
-     */
-    statusSeverity?: number | null;
-    /**
-     * Statusseveritydescription
-     */
-    StatusSeverityDescription?: string | null;
+    severity?: number | null;
     /**
      * Reason
      */
     reason?: string | null;
-};
-
-/**
- * TfLAPITrainLoading
- */
-export type TfLapiTrainLoading = {
     /**
-     * Value
+     * Multipledisruptions
      */
-    value?: number | null;
-};
-
-/**
- * TfLRouteSection
- */
-export type TfLRouteSection = {
-    /**
-     * Id
-     */
-    id?: string | null;
-    /**
-     * Lineid
-     */
-    lineId?: string | null;
-    /**
-     * Routecode
-     */
-    routeCode?: string | null;
-    /**
-     * Name
-     */
-    name?: string | null;
-    /**
-     * Linestring
-     */
-    lineString?: string | null;
-    /**
-     * Direction
-     */
-    direction?: string | null;
-    /**
-     * Originationname
-     */
-    originationName?: string | null;
-    /**
-     * Destinationname
-     */
-    destinationName?: string | null;
-    /**
-     * Validto
-     */
-    validTo?: string | null;
-    /**
-     * Validfrom
-     */
-    validFrom?: string | null;
+    multipleDisruptions?: boolean;
 };
 
 /**
@@ -244,9 +105,9 @@ export type TfLRouteSection = {
  */
 export type TflApiResponse = {
     /**
-     * Messages
+     * Lines
      */
-    messages?: Array<TfLapiLine>;
+    lines?: Array<TfLapiDisruptedLineInfo>;
 };
 
 /**

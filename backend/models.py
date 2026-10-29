@@ -80,7 +80,7 @@ class TfLAPILineStatus(BaseModel):
     id: int | None = None
     lineId: str | None = None
     statusSeverity: int | None = None
-    StatusSeverityDescription: str | None = None
+    statusSeverityDescription: str | None = None
     reason: str | None = None
 
 class TfLAPITrainLoading(BaseModel):
@@ -101,6 +101,12 @@ class TfLAPILine(BaseModel):
     lineStatuses: list[TfLAPILineStatus] = Field(default_factory=list[dict])
     crowding: TfLAPICrowding = Field(default_factory=dict)
 
+class TfLAPIDisruptedLineInfo(BaseModel):
+    name: str | None = None
+    severity: int | None = None
+    reason: str | None = None
+    multipleDisruptions: bool = False
+
 class TflAPIResponse(BaseModel):
     """Data model for TfL API response body"""
-    messages: list[TfLAPILine] = Field(default_factory=list)
+    lines: list[TfLAPIDisruptedLineInfo] = Field(default_factory=list)
